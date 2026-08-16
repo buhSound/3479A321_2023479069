@@ -1,0 +1,10 @@
+include <iostream>
+
+using namespace std;
+
+/*Proibando wakatime por que no se actualiza el dashboard aaaaa tecla por  teclas lento lento ahora f5 pantalla*/
+int main(){
+    cout << "Probando el wakatime 1 2 3 " << endl;
+
+    return 0;
+}
