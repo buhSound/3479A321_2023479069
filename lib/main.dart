@@ -124,11 +124,17 @@ class PegCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[400],
-        border: Border.all(color: Colors.grey[600]!, width: 1.5),
-      ),
+    //ocultar esquinas para ver la fomra de cruz
+    if (type == CellType.voidCell){
+      return const SizedBox.shrink();
+    }
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[400],
+          border: Border.all(color: Colors.grey[600]!, width: 1.5),
+        ),
       child: Center(
         child: type == CellType.occupiedPeg
           ? Container(
@@ -150,7 +156,8 @@ class PegCell extends StatelessWidget {
             )
           : null, 
           ),
-        );
+        ),
+    );
   }
 }
   
