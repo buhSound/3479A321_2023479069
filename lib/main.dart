@@ -4,6 +4,12 @@ void main() {
   runApp(const MyApp()); 
 }
 
+//Estados de la celda del tablero
+enum CellType{
+  voidCell, //Fuera de los limites
+  emptyHole, //Casiilla jugable desocupada
+  occupiedPeg, //Casilla jugable con clavija presente
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -20,6 +26,20 @@ class MyApp extends StatelessWidget {
 class PegSolitaireScreen extends StatelessWidget {
   const PegSolitaireScreen({super.key});
 
+  static const int gridSize = 7;
+  static const int totalCells = gridSize * gridSize;
+
+  //Determina tipo de celda
+
+  CellType _getCellType(int row, int col){
+    final bool isCorner = (row < 2 || row > 4) && (col < 2 || col > 4);
+    if(isCorner){
+      return CellType.voidCell;
+    }
+    return CellType.occupiedPeg;
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,28 +83,45 @@ class PegSolitaireScreen extends StatelessWidget {
             ),
             itemCount:49,
             itemBuilder: (context, index) {
+              //convertir indice en coordenadas matriciales
+              final int row = index ~/ gridSize;
+              final int col = index % gridSize;
+                final CellType cellType = _getCellType(row, col);
               return Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[400],
                   border: Border.all(color: Colors.grey[600]!, width: 1.5),
                 ),
                 child: Center(
-                  child: Text(
-                    '$index',
-                    style: const TextStyle(
-                      fontSize: 16, 
-                      fontWeight: FontWeight.bold,
+                  child: cellType == CellType.occupiedPeg
+                    ? Container(
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                    )
+                  : cellType == CellType.emptyHole
+                    ? Container(
+                        width: 30,
+                        height: 30,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : null, 
                     ),
-                  ),
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
-}
+        );
+      }  
+    }
+  
 
 
 
