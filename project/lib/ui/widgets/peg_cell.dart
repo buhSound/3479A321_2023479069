@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/core/enums/cell_type.dart';
+import '../../core/enums/cell_type.dart';
 
 class PegCell extends StatelessWidget {
   final int row;
