@@ -58,11 +58,11 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-  fonts:
-    - family: NombreName
-      fonts:
-        - asset: assets/fonts/NombreName.ttf
-          weight: 700
+  #fonts:
+  #  - family: NombreName
+  #    fonts:
+  #      - asset: assets/fonts/NombreName.ttf
+  #        weight: 700
 
 
 

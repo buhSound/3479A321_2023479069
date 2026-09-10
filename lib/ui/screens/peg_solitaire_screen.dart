@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
 import '../../core/enums/cell_type.dart';
 import '../widgets/peg_cell.dart';
+import 'package:logger/logger.dart';
+import '../../models/game_record.dart';
 
+final _logger = Logger();
+
+void _simularPartida(){
+  final testGame = GameRecord(
+    id:'test_001',
+    date: DateTime.now(),
+    remainingPegs: 1,
+    totalMoves: 31,
+    durationSeconds: 349,
+    isVictory: true,
+  );
+
+  _logger.i('''
+  Simulacion de Partida
+  ID: ${testGame.id}
+  Fecha: ${testGame.date}
+  Piezas restantes: ${testGame.remainingPegs}
+  Victoria: ${testGame.isVictory}
+ ''');
+}
 class PegSolitaireScreen extends StatelessWidget {
   const PegSolitaireScreen({super.key});
 
@@ -21,7 +43,17 @@ class PegSolitaireScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Solitario')),
+      appBar: AppBar(
+      title: const Text('Solitario'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.bug_report),
+          onPressed: () {
+            _simularPartida();
+          },
+        ),
+      ],
+    ),
       body: SafeArea(
         child: Column(
           children: [
