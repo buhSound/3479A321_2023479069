@@ -6,7 +6,30 @@ import '../../models/game_record.dart';
 
 final _logger = Logger();
 
-void _simularPartida(){
+
+class PegSolitaireScreen extends StatefulWidget{
+  const PegSolitaireScreen({super.key});
+
+  @override
+  State<PegSolitaireScreen> createState() => _PegSolitaireScreenState();
+}
+class _PegSolitaireScreenState extends State<PegSolitaireScreen> {
+  static const int gridSize = 7;
+  static const int totalCells = gridSize * gridSize;
+
+  int? rowSelected;
+  int? colSelected;
+
+  //Determina tipo de celda
+
+  CellType _getCellType(int row, int col){
+    final bool isCorner = (row < 2 || row > 4) && (col < 2 || col > 4);
+    if(isCorner){
+      return CellType.voidCell;
+    }
+    return CellType.occupiedPeg;
+  }
+  void _simularPartida(){
   final testGame = GameRecord(
     id:'test_001',
     date: DateTime.now(),
@@ -24,22 +47,20 @@ void _simularPartida(){
   Victoria: ${testGame.isVictory}
  ''');
 }
-class PegSolitaireScreen extends StatelessWidget {
-  const PegSolitaireScreen({super.key});
 
-  static const int gridSize = 7;
-  static const int totalCells = gridSize * gridSize;
+  void _handleCellTapper(int row, int col, CellType type){
+  if (type == CellType.voidCell) return;
 
-  //Determina tipo de celda
-
-  CellType _getCellType(int row, int col){
-    final bool isCorner = (row < 2 || row > 4) && (col < 2 || col > 4);
-    if(isCorner){
-      return CellType.voidCell;
+  setState((){
+    if(rowSelected == row && colSelected == col){
+      _logger.d ('Deseleccionada celda en $rowSelected, $colSelected');
+    } else {
+      rowSelected = row;
+      colSelected = col;
+      _logger.d('Seleccionada la celda $row, $col | Tipo: $type');
     }
-    return CellType.occupiedPeg;
-  }
-
+  });
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +83,7 @@ class PegSolitaireScreen extends StatelessWidget {
               height:60,
               color: Colors.grey[300],
               child: const Center(
-                child: Text('Status: 349 segundos | Piezas restantes: 33',
+                child: Text('Status: 379 segundos | Piezas restantes: 33',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
@@ -91,21 +112,22 @@ class PegSolitaireScreen extends StatelessWidget {
               crossAxisSpacing: 2.0,
               mainAxisSpacing: 2.0,
             ),
-            itemCount:49,
+            itemCount:totalCells,
             itemBuilder: (context, index) {
               //convertir indice en coordenadas matriciales
               final int row = index ~/ gridSize;
               final int col = index % gridSize;
+
               final CellType cellType = _getCellType(row, col);
+
+              final bool isCurrentlySelected = (row == rowSelected && col == colSelected);
 
               return PegCell(
                 row: row,
                 col: col,
                 type: cellType,
-                isSelected: false,
-                onTap: (){
-                 
-                },          
+                isSelected: isCurrentlySelected,
+                onTap: () => _handleCellTapper(row, col, cellType),                       
               );
             },
           ),
