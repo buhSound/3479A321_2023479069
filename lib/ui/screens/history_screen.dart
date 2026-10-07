@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../models/game_record.dart';
 
 class HistoryScreen extends StatelessWidget{
@@ -29,7 +28,7 @@ class HistoryScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     final records = _getMockRecords();
-    final theme = Theme.of(context);
+    //final theme = Theme.of(context);
 
     return Scaffold(appBar: AppBar(
       title: const Text('Historial de Partidas'),
@@ -49,7 +48,6 @@ class HistoryScreen extends StatelessWidget{
 
 class _GameRecordCard extends StatelessWidget{
   final GameRecord record;
-
   const _GameRecordCard({required this.record});
 
   String _formatDuration(int totalSeconds){

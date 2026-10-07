@@ -3,6 +3,8 @@ import 'package:lab1/ui/screens/menu_screen.dart';
 import 'ui/screens/peg_solitaire_screen.dart';
 import 'package:logger/logger.dart';
 import 'ui/screens/history_screen.dart';
+import 'package:lab1/viewmodels/peg_solitaire_viewmodel.dart';
+import 'package:provider/provider.dart';
 void main() {
   runApp(const MyApp()); 
 }
@@ -21,13 +23,13 @@ class MyApp extends StatelessWidget {
 
       routes:{
         '/':(context) => const MenuScreen(),
-        '/juego': (context) => const PegSolitaireScreen(),
+        '/juego': (context) => ChangeNotifierProvider(
+          create: (_) => PegSolitaireViewModel(),
+          child: PegSolitaireScreen(),
+        ),
         '/historial': (context) => const HistoryScreen(),
 
-        '/reglas':(context) => Scaffold(
-          appBar: AppBar(title: const Text('Reglas')),
-          body: const Center(child: Text ('En construccion, favor esperar')),
-        ),
+        '/reglas':(context) => const RulesScreen(),     
         '/sobre':(context) => Scaffold(
           appBar: AppBar(title: const Text('Acerca de ')),
           body: const Center(child: Text('En construccion')),
