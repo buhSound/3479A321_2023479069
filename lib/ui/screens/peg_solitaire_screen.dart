@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+
 import '../../core/enums/cell_type.dart';
 import '../widgets/peg_cell.dart';
-import 'package:logger/logger.dart';
 import '../../models/game_record.dart';
+import '../../models/board_position.dart';
 
 final _logger = Logger();
-
 
 class PegSolitaireScreen extends StatefulWidget{
   const PegSolitaireScreen({super.key});
@@ -17,13 +18,12 @@ class _PegSolitaireScreenState extends State<PegSolitaireScreen> {
   static const int gridSize = 7;
   static const int totalCells = gridSize * gridSize;
 
-  int? rowSelected;
-  int? colSelected;
+  BoardPosition? selectedPosition;
 
   //Determina tipo de celda
 
-  CellType _getCellType(int row, int col){
-    final bool isCorner = (row < 2 || row > 4) && (col < 2 || col > 4);
+  CellType _getCellType(BoardPosition pos){
+    final bool isCorner = (pos.row < 2 || pos.row > 4) && (pos.col < 2 || pos.col > 4);
     if(isCorner){
       return CellType.voidCell;
     }
@@ -48,16 +48,16 @@ class _PegSolitaireScreenState extends State<PegSolitaireScreen> {
  ''');
 }
 
-  void _handleCellTapper(int row, int col, CellType type){
+  void _handleCellTapper(BoardPosition pos, CellType type){
   if (type == CellType.voidCell) return;
 
   setState((){
-    if(rowSelected == row && colSelected == col){
-      _logger.d ('Deseleccionada celda en $rowSelected, $colSelected');
+    if(selectedPosition == pos){
+      _logger.d ('Deseleccionada celda en $pos');
+      selectedPosition = null;
     } else {
-      rowSelected = row;
-      colSelected = col;
-      _logger.d('Seleccionada la celda $row, $col | Tipo: $type');
+      selectedPosition = pos;
+      _logger.d('Seleccionada la celda $pos | Tipo: $type');
     }
   });
 }
@@ -115,19 +115,16 @@ class _PegSolitaireScreenState extends State<PegSolitaireScreen> {
             itemCount:totalCells,
             itemBuilder: (context, index) {
               //convertir indice en coordenadas matriciales
-              final int row = index ~/ gridSize;
-              final int col = index % gridSize;
+              final pos = BoardPosition(index ~/gridSize, index % gridSize);
+              final CellType cellType = _getCellType(pos);
 
-              final CellType cellType = _getCellType(row, col);
-
-              final bool isCurrentlySelected = (row == rowSelected && col == colSelected);
+              final bool isCurrentlySelected = (pos == selectedPosition);
 
               return PegCell(
-                row: row,
-                col: col,
+                position: pos,
                 type: cellType,
                 isSelected: isCurrentlySelected,
-                onTap: () => _handleCellTapper(row, col, cellType),                       
+                onTap: () => _handleCellTapper(pos, cellType),                       
               );
             },
           ),

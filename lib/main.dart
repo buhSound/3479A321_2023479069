@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lab1/core/enums/cell_type.dart';
 import 'package:lab1/ui/screens/menu_screen.dart';
 import 'ui/screens/peg_solitaire_screen.dart';
 import 'package:logger/logger.dart';
